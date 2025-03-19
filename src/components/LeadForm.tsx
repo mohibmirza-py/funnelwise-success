@@ -11,6 +11,8 @@ interface FormData {
   description: string;
 }
 
+const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/17299672/2l7i5oh/";
+
 const LeadForm = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +30,29 @@ const LeadForm = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const sendToZapier = async (data: FormData) => {
+    try {
+      const response = await fetch(ZAPIER_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        mode: "no-cors", // Handle CORS issues
+        body: JSON.stringify({
+          ...data,
+          timestamp: new Date().toISOString(),
+          source: window.location.href
+        }),
+      });
+      
+      console.log("Data sent to Zapier webhook");
+      return true;
+    } catch (error) {
+      console.error("Error sending data to Zapier:", error);
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,14 +82,18 @@ const LeadForm = () => {
     setIsLoading(true);
     
     try {
-      // Simulating form submission with a timeout
-      // In a real implementation, you'd replace this with an actual API call
+      // Send data to Zapier webhook
+      const zapierSuccess = await sendToZapier(formData);
+      
+      // Simulating form submission with a timeout for the guide delivery
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Success handling
       toast({
         title: "Success!",
-        description: "Your free franchise guide is on its way to your inbox!",
+        description: zapierSuccess 
+          ? "Your free franchise guide is on its way to your inbox!" 
+          : "Your request was processed, but there might be a delay in delivery.",
       });
       
       // Reset form after successful submission
