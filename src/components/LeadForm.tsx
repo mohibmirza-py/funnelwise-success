@@ -100,7 +100,7 @@ const LeadForm = () => {
                 <div className="text-success-600 uppercase tracking-wider text-sm font-semibold mb-2">Free Guide</div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-3">Franchise Success Blueprint</h3>
                 <div className="w-24 h-1 bg-success-500 mx-auto mb-4"></div>
-                <p className="text-gray-600 mb-6">Discover the proven strategies to build a thriving franchise business.</p>
+                <p className="text-gray-600 mb-6">40 Reasons to Start a Franchise, 8 Reasons Not To & 8 Steps to Find the Right One for Success</p>
                 <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-success-100 flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-success-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />

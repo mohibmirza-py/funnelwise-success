@@ -13,15 +13,15 @@ interface Testimonial {
 const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Michael Harding",
-    role: "Owner, Five Star Painting",
+    name: "Clint Tabon",
+    role: "Focal Point Business Coaching",
     quote: "Adrienne is the reason behind my success. Her expertise helped me scale my franchise business beyond what I imagined!",
     videoUrl: "https://drive.google.com/file/d/1xYDMkLrAJZeJqREbchF8UOq0IzSrGhHW/preview"
   },
   {
     id: 2,
-    name: "Clint Tabon",
-    role: "Focal Point Business Coaching",
+    name: "Michael Harding",
+    role: "Owner, Five Star Painting",
     quote: "I wasn't sure if franchising was right for me, but Adrienne's guidance made all the difference. Best decision I ever made.",
     videoUrl: "https://drive.google.com/file/d/1-cawDbamZHUfS_hclZVfvlv7HllrD-ZL/preview"
   }
