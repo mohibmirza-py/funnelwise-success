@@ -11,7 +11,7 @@ interface FormData {
   description: string;
 }
 
-const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/17299672/2l7i5oh/";
+const WEBHOOK_URL = "https://hook.eu2.make.com/agce3dhg3rudmjbv79ueocvlqsn68d0q";
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -32,9 +32,9 @@ const LeadForm = () => {
     }));
   };
 
-  const sendToZapier = async (data: FormData) => {
+  const sendToWebhook = async (data: FormData) => {
     try {
-      const response = await fetch(ZAPIER_WEBHOOK_URL, {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,10 +47,10 @@ const LeadForm = () => {
         }),
       });
       
-      console.log("Data sent to Zapier webhook");
+      console.log("Data sent to webhook");
       return true;
     } catch (error) {
-      console.error("Error sending data to Zapier:", error);
+      console.error("Error sending data to webhook:", error);
       return false;
     }
   };
@@ -82,8 +82,8 @@ const LeadForm = () => {
     setIsLoading(true);
     
     try {
-      // Send data to Zapier webhook
-      const zapierSuccess = await sendToZapier(formData);
+      // Send data to webhook
+      const webhookSuccess = await sendToWebhook(formData);
       
       // Simulating form submission with a timeout for the guide delivery
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -91,7 +91,7 @@ const LeadForm = () => {
       // Success handling
       toast({
         title: "Success!",
-        description: zapierSuccess 
+        description: webhookSuccess 
           ? "Your free franchise guide is on its way to your inbox!" 
           : "Your request was processed, but there might be a delay in delivery.",
       });
