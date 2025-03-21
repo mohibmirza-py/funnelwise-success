@@ -14,10 +14,7 @@ interface FormData {
 // Configuration constants
 const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
 const ADMIN_EMAIL = "damil.alantoai@gmail.com";
-// Using EmailJS for direct email sending (free service with reasonable limits)
-const EMAILJS_SERVICE_ID = "service_franchise";
-const EMAILJS_TEMPLATE_ID = "template_lead_notification";
-const EMAILJS_PUBLIC_KEY = "your_emailjs_public_key"; // Public key, safe to include in frontend code
+const WEBHOOK_URL = "https://hook.eu2.make.com/f1jihzggkcmynqjngsnmckswbi7ixg7m";
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -38,46 +35,27 @@ const LeadForm = () => {
     }));
   };
 
-  const sendEmailNotification = async (data: FormData) => {
+  const sendToWebhook = async (data: FormData) => {
     try {
-      // For demonstration: using fetch to send the data to EmailJS
-      // Note: In production, you would want to sign up for EmailJS (emailjs.com)
-      // and properly configure templates
-      
-      const templateParams = {
-        to_email: ADMIN_EMAIL,
-        from_name: `${data.firstName} ${data.lastName}`,
-        from_email: data.email,
-        phone: data.phone || "Not provided",
-        message: data.description || "No additional information provided",
-        subject: "New Franchise Guide Download Lead",
-        timestamp: new Date().toLocaleString(),
-      };
-
-      // Here we're using EmailJS which is a service that allows you to send emails directly
-      // from the client-side without needing a server
-      const response = await fetch(`https://api.emailjs.com/api/v1.0/email/send`, {
+      // Send form data to the Make.com webhook
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        mode: "no-cors", // Handle CORS issues
         body: JSON.stringify({
-          service_id: EMAILJS_SERVICE_ID,
-          template_id: EMAILJS_TEMPLATE_ID,
-          user_id: EMAILJS_PUBLIC_KEY,
-          template_params: templateParams,
+          ...data,
+          adminEmail: ADMIN_EMAIL,
+          timestamp: new Date().toLocaleString(),
+          source: window.location.href
         }),
       });
       
-      if (response.ok) {
-        console.log("Email notification sent successfully");
-        return true;
-      } else {
-        console.error("Failed to send email notification");
-        return false;
-      }
+      console.log("Data sent to webhook successfully");
+      return true;
     } catch (error) {
-      console.error("Error sending email notification:", error);
+      console.error("Error sending data to webhook:", error);
       return false;
     }
   };
@@ -136,8 +114,8 @@ const LeadForm = () => {
     setIsLoading(true);
     
     try {
-      // Send notification email to admin
-      await sendEmailNotification(formData);
+      // Send data to webhook
+      await sendToWebhook(formData);
       
       // Download the PDF immediately
       const downloadSuccess = downloadPDF();
