@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Button from "./Button";
@@ -12,6 +11,8 @@ interface FormData {
 }
 
 const WEBHOOK_URL = "https://hook.eu2.make.com/agce3dhg3rudmjbv79ueocvlqsn68d0q";
+const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
+const ADMIN_EMAIL = "damil.alantoai@gmail.com";
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -42,6 +43,7 @@ const LeadForm = () => {
         mode: "no-cors", // Handle CORS issues
         body: JSON.stringify({
           ...data,
+          adminEmail: ADMIN_EMAIL,
           timestamp: new Date().toISOString(),
           source: window.location.href
         }),
@@ -51,6 +53,33 @@ const LeadForm = () => {
       return true;
     } catch (error) {
       console.error("Error sending data to webhook:", error);
+      return false;
+    }
+  };
+
+  const downloadPDF = () => {
+    try {
+      // Create a temporary anchor element
+      const link = document.createElement("a");
+      
+      // Set the PDF URL - using a public file in your app
+      link.href = "/FINAL 40 Reasons to Start a Franchise (6).pdf";
+      
+      // Set download attribute and filename
+      link.download = PDF_FILENAME;
+      
+      // Append to the document (necessary for Firefox)
+      document.body.appendChild(link);
+      
+      // Trigger the download
+      link.click();
+      
+      // Remove the element
+      document.body.removeChild(link);
+      
+      return true;
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
       return false;
     }
   };
@@ -83,17 +112,17 @@ const LeadForm = () => {
     
     try {
       // Send data to webhook
-      const webhookSuccess = await sendToWebhook(formData);
+      await sendToWebhook(formData);
       
-      // Simulating form submission with a timeout for the guide delivery
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Download the PDF immediately
+      const downloadSuccess = downloadPDF();
       
       // Success handling
       toast({
         title: "Success!",
-        description: webhookSuccess 
-          ? "Your free franchise guide is on its way to your inbox!" 
-          : "Your request was processed, but there might be a delay in delivery.",
+        description: downloadSuccess 
+          ? "Your free franchise guide is downloading now!" 
+          : "Thank you for your submission! There was an issue with the automatic download. Please check your email for the guide.",
       });
       
       // Reset form after successful submission
@@ -109,7 +138,7 @@ const LeadForm = () => {
       console.error("Form submission error:", error);
       toast({
         title: "Something went wrong",
-        description: "Unable to submit your information. Please try again later.",
+        description: "Unable to process your request. Please try again later.",
         variant: "destructive",
       });
     } finally {
@@ -231,7 +260,7 @@ const LeadForm = () => {
                   className="w-full"
                   isLoading={isLoading}
                 >
-                  Get Instant Access to the Free Guide
+                  Download PDF
                 </Button>
               </div>
               
