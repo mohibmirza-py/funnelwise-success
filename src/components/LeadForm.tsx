@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Button from "./Button";
@@ -13,6 +14,7 @@ interface FormData {
 const WEBHOOK_URL = "https://hook.eu2.make.com/agce3dhg3rudmjbv79ueocvlqsn68d0q";
 const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
 const ADMIN_EMAIL = "damil.alantoai@gmail.com";
+const ADMIN_PASSWORD = "Damilalantoai1989"; // Note: Storing passwords in frontend code is not secure
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -44,12 +46,14 @@ const LeadForm = () => {
         body: JSON.stringify({
           ...data,
           adminEmail: ADMIN_EMAIL,
+          adminPassword: ADMIN_PASSWORD, // Sending password to authenticate email sending
+          notifyAdmin: true, // Flag to indicate admin should be notified
           timestamp: new Date().toISOString(),
           source: window.location.href
         }),
       });
       
-      console.log("Data sent to webhook");
+      console.log("Data sent to webhook for admin notification");
       return true;
     } catch (error) {
       console.error("Error sending data to webhook:", error);
