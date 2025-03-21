@@ -11,10 +11,13 @@ interface FormData {
   description: string;
 }
 
-const WEBHOOK_URL = "https://hook.eu2.make.com/agce3dhg3rudmjbv79ueocvlqsn68d0q";
+// Configuration constants
 const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
 const ADMIN_EMAIL = "damil.alantoai@gmail.com";
-const ADMIN_PASSWORD = "Damilalantoai1989"; // Note: Storing passwords in frontend code is not secure
+// Using EmailJS for direct email sending (free service with reasonable limits)
+const EMAILJS_SERVICE_ID = "service_franchise";
+const EMAILJS_TEMPLATE_ID = "template_lead_notification";
+const EMAILJS_PUBLIC_KEY = "your_emailjs_public_key"; // Public key, safe to include in frontend code
 
 const LeadForm = () => {
   const { toast } = useToast();
@@ -35,28 +38,46 @@ const LeadForm = () => {
     }));
   };
 
-  const sendToWebhook = async (data: FormData) => {
+  const sendEmailNotification = async (data: FormData) => {
     try {
-      const response = await fetch(WEBHOOK_URL, {
+      // For demonstration: using fetch to send the data to EmailJS
+      // Note: In production, you would want to sign up for EmailJS (emailjs.com)
+      // and properly configure templates
+      
+      const templateParams = {
+        to_email: ADMIN_EMAIL,
+        from_name: `${data.firstName} ${data.lastName}`,
+        from_email: data.email,
+        phone: data.phone || "Not provided",
+        message: data.description || "No additional information provided",
+        subject: "New Franchise Guide Download Lead",
+        timestamp: new Date().toLocaleString(),
+      };
+
+      // Here we're using EmailJS which is a service that allows you to send emails directly
+      // from the client-side without needing a server
+      const response = await fetch(`https://api.emailjs.com/api/v1.0/email/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        mode: "no-cors", // Handle CORS issues
         body: JSON.stringify({
-          ...data,
-          adminEmail: ADMIN_EMAIL,
-          adminPassword: ADMIN_PASSWORD, // Sending password to authenticate email sending
-          notifyAdmin: true, // Flag to indicate admin should be notified
-          timestamp: new Date().toISOString(),
-          source: window.location.href
+          service_id: EMAILJS_SERVICE_ID,
+          template_id: EMAILJS_TEMPLATE_ID,
+          user_id: EMAILJS_PUBLIC_KEY,
+          template_params: templateParams,
         }),
       });
       
-      console.log("Data sent to webhook for admin notification");
-      return true;
+      if (response.ok) {
+        console.log("Email notification sent successfully");
+        return true;
+      } else {
+        console.error("Failed to send email notification");
+        return false;
+      }
     } catch (error) {
-      console.error("Error sending data to webhook:", error);
+      console.error("Error sending email notification:", error);
       return false;
     }
   };
@@ -115,8 +136,8 @@ const LeadForm = () => {
     setIsLoading(true);
     
     try {
-      // Send data to webhook
-      await sendToWebhook(formData);
+      // Send notification email to admin
+      await sendEmailNotification(formData);
       
       // Download the PDF immediately
       const downloadSuccess = downloadPDF();
