@@ -1,6 +1,6 @@
-
 import { useEffect, useRef } from "react";
 import { ArrowDown, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import LeadForm from "@/components/LeadForm";
@@ -98,15 +98,16 @@ const Index = () => {
               Book a Free 15-Minute Consultation
             </Button>
             
-            <Button
-              variant="secondary"
-              onClick={scrollToForm}
-              className="flex items-center justify-center gap-2 group"
-              size="lg"
-            >
-              <ArrowDown className="h-5 w-5 group-hover:translate-y-1 transition-transform" />
-              Download Free Franchise Guide
-            </Button>
+            <Link to="/franchise-guide" className="inline-block">
+              <Button
+                variant="secondary"
+                className="flex items-center justify-center gap-2 group w-full"
+                size="lg"
+              >
+                <ArrowDown className="h-5 w-5 group-hover:translate-y-1 transition-transform" />
+                Get Franchise Guide
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -124,7 +125,11 @@ const Index = () => {
           </div>
           
           <div className="animate-on-scroll">
-            <LeadForm />
+            <LeadForm 
+              type="download"
+              title="Download Your Free Franchise Guide"
+              showEbookCover={true}
+            />
           </div>
         </div>
       </section>
