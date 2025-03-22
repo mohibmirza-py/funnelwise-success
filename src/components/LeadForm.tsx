@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Button from "./Button";
@@ -14,7 +13,7 @@ interface FormData {
 // Configuration constants
 const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
 const ADMIN_EMAIL = "damil.alantoai@gmail.com";
-const WEBHOOK_URL = "https://hook.eu2.make.com/f1jihzggkcmynqjngsnmckswbi7ixg7m";
+const WEBHOOK_URL = "https://hook.eu2.make.com/ubp6paow7pbkq1kibybtaz1ncbfx7cf9";
 
 const LeadForm = () => {
   const { toast } = useToast();
