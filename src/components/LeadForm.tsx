@@ -12,6 +12,7 @@ interface FormData {
 }
 
 // Configuration constants
+const PDF_FILENAME = "40 Reasons to Start a Franchise.pdf";
 const ADMIN_EMAIL = "damil.alantoai@gmail.com";
 const WEBHOOK_URL = "https://hook.eu2.make.com/f1jihzggkcmynqjngsnmckswbi7ixg7m";
 
@@ -59,6 +60,33 @@ const LeadForm = () => {
     }
   };
 
+  const downloadPDF = () => {
+    try {
+      // Create a temporary anchor element
+      const link = document.createElement("a");
+      
+      // Set the PDF URL - using a public file in your app
+      link.href = "/FINAL 40 Reasons to Start a Franchise (6).pdf";
+      
+      // Set download attribute and filename
+      link.download = PDF_FILENAME;
+      
+      // Append to the document (necessary for Firefox)
+      document.body.appendChild(link);
+      
+      // Trigger the download
+      link.click();
+      
+      // Remove the element
+      document.body.removeChild(link);
+      
+      return true;
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -89,10 +117,15 @@ const LeadForm = () => {
       // Send data to webhook
       await sendToWebhook(formData);
       
+      // Download the PDF immediately
+      const downloadSuccess = downloadPDF();
+      
       // Success handling
       toast({
         title: "Success!",
-        description: "Thank you for your submission! You'll receive access information shortly.",
+        description: downloadSuccess 
+          ? "Your free franchise guide is downloading now!" 
+          : "Thank you for your submission! There was an issue with the automatic download. Please check your email for the guide.",
       });
       
       // Reset form after successful submission
@@ -141,7 +174,7 @@ const LeadForm = () => {
         
         {/* Form */}
         <div className="p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Get Free Access to Our Franchise Guide</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Download Your Free Franchise Guide</h2>
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -230,7 +263,7 @@ const LeadForm = () => {
                   className="w-full"
                   isLoading={isLoading}
                 >
-                  Get Free Access Now
+                  Download PDF
                 </Button>
               </div>
               
