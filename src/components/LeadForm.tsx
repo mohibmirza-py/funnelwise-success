@@ -21,7 +21,7 @@ const TEST_DATA = {
   firstName: "Test",
   lastName: "User",
   email: "test@example.com",
-  phone: "555-123-4567",
+  phone: "5551234567",
   description: "This is a test submission to verify webhook connectivity."
 };
 
@@ -111,6 +111,8 @@ const LeadForm = ({
       // Prepare the payload with additional metadata
       const payload = {
         ...data,
+        // Format phone number - remove non-numeric characters
+        phone: data.phone ? data.phone.replace(/\D/g, '') : '',
         adminEmail: ADMIN_EMAIL,
         timestamp: new Date().toISOString(),
         formType: type,
