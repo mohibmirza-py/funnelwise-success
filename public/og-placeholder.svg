@@ -1,0 +1,7 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#f0fdf4"/>
+  <rect x="50" y="50" width="1100" height="530" rx="20" fill="#16a34a" fillOpacity="0.1"/>
+  <text x="600" y="250" fontFamily="Arial, sans-serif" fontSize="60" fontWeight="bold" fill="#16a34a" textAnchor="middle">Success Franchising</text>
+  <text x="600" y="330" fontFamily="Arial, sans-serif" fontSize="36" fill="#333333" textAnchor="middle">Expert Franchise Guidance</text>
+  <text x="600" y="400" fontFamily="Arial, sans-serif" fontSize="24" fill="#555555" textAnchor="middle">Unlock Your Franchising Potential With Expert Guidance</text>
+</svg> 
