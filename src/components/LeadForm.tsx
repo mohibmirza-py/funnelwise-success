@@ -16,17 +16,8 @@ const ADMIN_EMAIL = "damil.alantoai@gmail.com";
 // Webhook URL for form submissions - verified correct URL
 const WEBHOOK_URL = "https://hook.eu2.make.com/ubp6paow7pbkq1kibybtaz1ncbfx7cf9";
 
-// Sample test data for webhook debugging
-const TEST_DATA = {
-  firstName: "Test",
-  lastName: "User",
-  email: "test@example.com",
-  phone: "5551234567",
-  description: "This is a test submission to verify webhook connectivity."
-};
-
 // Debug mode flag - set to false in production
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 interface LeadFormProps {
   type?: "download" | "contact"; // "download" includes PDF download, "contact" is just a form submission
@@ -42,7 +33,6 @@ const LeadForm = ({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [webhookSuccess, setWebhookSuccess] = useState<boolean | null>(null);
-  const [isTestingWebhook, setIsTestingWebhook] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -55,45 +45,6 @@ const LeadForm = ({
   const debugLog = (message: string, data?: any) => {
     if (DEBUG_MODE) {
       console.log(`[LeadForm] ${message}`, data || '');
-    }
-  };
-
-  // Test webhook with sample data
-  const testWebhook = async () => {
-    setIsTestingWebhook(true);
-    debugLog("Testing webhook with sample data", TEST_DATA);
-    
-    try {
-      // Directly call curl from browser console for additional verification
-      console.log('%c[TEST] Run this curl command in terminal to test webhook:', 'background: #333; color: #fff; padding: 4px 8px; border-radius: 4px;');
-      console.log(`curl -X POST "${WEBHOOK_URL}" \\
--H "Content-Type: application/json" \\
--d '${JSON.stringify(TEST_DATA)}'`);
-      
-      // Use our sendToWebhook function with test data
-      const result = await sendToWebhook(TEST_DATA);
-      
-      if (result) {
-        toast({
-          title: "Webhook Test Successful",
-          description: "The webhook connection was tested successfully.",
-        });
-      } else {
-        toast({
-          title: "Webhook Test Failed",
-          description: "The webhook test failed. Check console for details.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error("Webhook test error:", error);
-      toast({
-        title: "Webhook Test Error",
-        description: "An error occurred during the webhook test. Check console for details.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsTestingWebhook(false);
     }
   };
 
@@ -251,29 +202,6 @@ const LeadForm = ({
           : "Your form has been submitted successfully!",
       });
       
-      // If this is a download form, show a success message with download option
-      if (type === "download") {
-        // Add a delay before showing the manual download option
-        setTimeout(() => {
-          toast({
-            title: "Want to download the guide now?",
-            description: (
-              <div className="mt-2">
-                <Button 
-                  variant="secondary" 
-                  size="sm"
-                  className="w-full"
-                  onClick={downloadPDF}
-                >
-                  Download PDF
-                </Button>
-              </div>
-            ),
-            duration: 10000, // Extended duration to allow user to click
-          });
-        }, 2000);
-      }
-      
       // Reset form after successful submission
       setFormData({
         firstName: "",
@@ -407,43 +335,17 @@ const LeadForm = ({
                 ></textarea>
               </div>
               
-              <div className="pt-2">
+              <div>
                 <Button 
                   type="submit"
                   variant="primary"
+                  size="lg"
                   className="w-full"
                   isLoading={isLoading}
                 >
                   {type === "download" ? "Get Free Guide" : "Submit Request"}
                 </Button>
               </div>
-              
-              {/* Debug information - only shown in debug mode */}
-              {DEBUG_MODE && (
-                <div className="mt-4 p-3 bg-gray-100 rounded-md text-xs">
-                  <p className="font-semibold">Debug Info:</p>
-                  <p>Form Type: {type}</p>
-                  <p>Webhook Status: {webhookSuccess === null ? 'Not attempted' : webhookSuccess ? 'Success' : 'Failed'}</p>
-                  <p>Request Time: {new Date().toLocaleTimeString()}</p>
-                  
-                  <div className="mt-2 pt-2 border-t border-gray-200">
-                    <p className="font-semibold mb-2">Webhook Testing:</p>
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      size="sm"
-                      className="w-full text-xs"
-                      isLoading={isTestingWebhook}
-                      onClick={testWebhook}
-                    >
-                      Test Webhook with Sample Data
-                    </Button>
-                    <p className="mt-2 text-xs text-gray-500">
-                      Check browser console for curl command and detailed logs.
-                    </p>
-                  </div>
-                </div>
-              )}
               
               <p className="text-xs text-gray-500 mt-4">
                 By submitting this form, you agree to receive franchise information and occasional emails about franchising opportunities. 
